@@ -1,111 +1,115 @@
 package com.study.administration.administration.Models;
 
 import com.sun.istack.NotNull;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 
 @Entity
 public class User
 {
     @Id
     @GeneratedValue
-    private int ID;
+    private Long id;
 
     @NotNull
     @Column(unique = false, nullable = false)
-    private String Name;
+    private String name;
 
     @NotNull
     @Column(unique = false, nullable = false)
-    private String Surname;
+    private String surname;
 
 
     @NotNull
     @Column(unique = false, nullable = false)
-    private Boolean Status;
+    private Boolean status;
 
     @NotNull
     @Column(unique = true, nullable = false)
-    private String Email;
+    private String email;
 
     @NotNull
     @Column(unique = true, nullable = false)
-    private String PhoneNumber;
+    private String phoneNumber;
 
     @NotNull
     @Column(unique = false, nullable = false)
-    private Date DateOfCreation;
+    private Long dateOfCreation;
 
-    public User(String name, String surname, String email, String phoneNumber, Date dateOfCreation) {
-        Name = name;
-        Surname = surname;
-        Status = true;
-        Email = email;
-        PhoneNumber = phoneNumber;
-        DateOfCreation = dateOfCreation;
+
+    public User(String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation)
+    {
+        this.name = name;
+        this.surname = surname;
+        this.status = true;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dateOfCreation = dateOfCreation;
     }
 
     public User() {
 
     }
 
-    public int getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getSurname() {
-        return Surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
-        Surname = surname;
+        this.surname = surname;
     }
 
-    public boolean isStatus() {
-        return Status;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setStatus(boolean status) {
-        Status = status;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        PhoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
-    public Date getDateOfCreation() {
-        return DateOfCreation;
-    }
+    public String getDateOfCreation() {
+        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+        Date result = new Date(dateOfCreation);
+        return simple.format(result);
 
-    public void setDateOfCreation(Date dateOfCreation) {
-        DateOfCreation = dateOfCreation;
+    }
+    public void setDateOfCreation(Long dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
     }
 }
+
