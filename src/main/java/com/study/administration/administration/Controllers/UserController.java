@@ -1,7 +1,6 @@
 package com.study.administration.administration.Controllers;
 
 import com.study.administration.administration.Models.User;
-import com.study.administration.administration.Models.dtos.EditRequestDTO;
 import com.study.administration.administration.Services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @AllArgsConstructor
-
 public class UserController
 {
     public final UserService userService;
@@ -29,6 +27,7 @@ public class UserController
         return "adduser";
     }
 
+    /*
     @PostMapping("/add")
     public String addUser(@ModelAttribute User user, Model model)
     {
@@ -43,6 +42,7 @@ public class UserController
             return "statusCode";
         }
     }
+     */
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id, Model model)

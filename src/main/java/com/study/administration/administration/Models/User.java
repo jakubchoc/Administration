@@ -1,46 +1,28 @@
 package com.study.administration.administration.Models;
 
-import com.sun.istack.NotNull;
-import javax.persistence.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 
-@Entity
 public class User
 {
-    @Id
-    @GeneratedValue
     private Long id;
 
-    @NotNull
-    @Column(unique = false, nullable = false)
     private String name;
 
-    @NotNull
-    @Column(unique = false, nullable = false)
     private String surname;
 
-
-    @NotNull
-    @Column(unique = false, nullable = false)
     private Boolean status;
 
-    @NotNull
-    @Column(unique = true, nullable = false)
     private String email;
 
-    @NotNull
-    @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    @NotNull
-    @Column(unique = false, nullable = false)
     private Long dateOfCreation;
 
 
-    public User(String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation)
+    public User(Long id, String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation)
     {
         this.name = name;
         this.surname = surname;
