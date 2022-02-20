@@ -34,7 +34,6 @@ public class UserService
             userRepository.deleteById(id);
             return 200;
         }
-
     }
 
     public int AddUser(User user)
@@ -50,7 +49,6 @@ public class UserService
         {
             userRepository.save(newUser);
             return 200;
-
         }
     }
 
@@ -76,14 +74,13 @@ public class UserService
         }
         return 200;
     }
-    public void EditUser(User oldDataUser)
+    public void EditUser(String name, String surname, String email, String phoneNumber, Long id)
     {
-        User newDataUser = userRepository.findById(oldDataUser.getId()).stream().findFirst().orElse(null);
-        newDataUser.setName(oldDataUser.getName());
-        newDataUser.setSurname(oldDataUser.getSurname());
-        newDataUser.setEmail(oldDataUser.getEmail());
-        newDataUser.setPhoneNumber(oldDataUser.getPhoneNumber());
+        User newDataUser = userRepository.findById(id).stream().findFirst().orElse(null);
+        newDataUser.setName(name);
+        newDataUser.setSurname(surname);
+        newDataUser.setEmail(email);
+        newDataUser.setPhoneNumber(phoneNumber);
         userRepository.save(newDataUser);
     }
-
 }

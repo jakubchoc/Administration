@@ -8,25 +8,26 @@
 <body>
 <div class="container">
     <h2>Edit User</h2>
-    <form th:action="@{/edit}" th:method="get">
+    <!--<form th:action="@{/edit}" th:method="post"> -->
+        <form th:action="@{|/edit/*{userPlaceHolder.getId()}|}"*>
         <label>
             Name:
-            <input type="text" name="Name" class="form-control" th:value="${userPlaceHolder.getName()}" required>
+            <input type="text" name="name" class="form-control" th:value="${userPlaceHolder.getName()}" required>
         </label>
         <br>
         <label>
             Surname:
-            <input type="text" name="Surname" class="form-control" th:value="${userPlaceHolder.getSurname()}" required>
+            <input type="text" name="surname" class="form-control" th:value="${userPlaceHolder.getSurname()}" required>
         </label>
         <br>
         <label>
             E-mail:
-            <input type="text" name="Email" class="form-control" th:value="${userPlaceHolder.getEmail()}" required>
+            <input type="text" name="email" class="form-control" th:value="${userPlaceHolder.getEmail()}" required>
         </label>
         <br>
         <label>
             Telephone:
-            <input type="text" name="PhoneNumber" class="form-control" th:value="${userPlaceHolder.getPhoneNumber()}" required>
+            <input type="text" name="phoneNumber" class="form-control" th:value="${userPlaceHolder.getPhoneNumber()}" required>
         </label>
         <br>
         <input type="submit" class="btn btn-primary btn-sm" value="Submit">

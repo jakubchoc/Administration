@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RestController
 @AllArgsConstructor
 
 public class UserController
@@ -75,16 +74,10 @@ public class UserController
             return "editUser";
         }
     }
-    @GetMapping("/edit")
-    public String editUser(@ModelAttribute User user)
+    @GetMapping("/edit/{id}")
+    public String editUser(@PathVariable Long id, String name, String surname, String email, String phoneNumber)
     {
-        userService.EditUser(user);
-        return "redirect:/";
-    }
-    @GetMapping("/edit")
-    public String editUser(@ModelAttribute User user, @RequestBody EditRequestDTO editRequestDTO)
-    {
-        userService.EditUser(user);
+        userService.EditUser(name, surname, email, phoneNumber, id);
         return "redirect:/";
     }
 
