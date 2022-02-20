@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 
 public class User
 {
-    private Long id;
+    private int id;
 
     private String name;
 
@@ -22,8 +22,9 @@ public class User
     private Long dateOfCreation;
 
 
-    public User(Long id, String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation)
+    public User(int id, String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation)
     {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.status = true;
@@ -36,11 +37,11 @@ public class User
 
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -84,8 +85,12 @@ public class User
         this.phoneNumber = phoneNumber;
     }
 
+    public Long getDateOfCreationInLong(){
+        return dateOfCreation;
+    }
+
     public String getDateOfCreation() {
-        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+        DateFormat simple = new SimpleDateFormat("yyyy-MM-dd");
         Date result = new Date(dateOfCreation);
         return simple.format(result);
 

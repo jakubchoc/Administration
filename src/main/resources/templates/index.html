@@ -7,16 +7,40 @@
 </head>
 <body>
 <div class="container">
-    <h1>Administration</h1>
+    <h3>Filter</h3>
+    <form th:action="@{/find}" method="post">
+        <label >Find By:</label>
+        <select name="kind" class="form-select form-select-sm" aria-label="Default select example">
+            <option value="name">Name</option>
+            <option value="surname">Surname</option>
+            <option value="email">E-mail</option>
+            <option value="telephone">Telephone</option>
+            <option value="id">Id</option>
+        </select>
+            <input type="text" placeholder="Search.." name="search">
+            <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
+    </form><br>
+    <form  th:action="@{/date}" method="post">
+        <label >Select Date:</label>
+        <input name="dateFrom" type="date" placeholder="from">
+        <input name="dateTo" type="date" placeholder="to">
+        <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
+    </form><br>
+    <a th:href="@{/}">
+        <button type="button" class="btn btn-primary btn-sm" >Reset</button>
+    </a>
+
+
+    <h3>Administration</h3>
     <table class="table table-striped">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Status</th>
-            <th>E-mail</th>
-            <th>Telephone</th>
-            <th>Date of Creation</th>
+            <th><button type="button" class="btn btn-secondary btn-sm">ID ↑↓</button></th>
+            <th><button type="button" class="btn btn-secondary btn-sm">Name ↑↓</button></th>
+            <th><button type="button" class="btn btn-secondary btn-sm">Surname ↑↓</button></th>
+            <th><button type="button" class="btn btn-secondary btn-sm">Status ↑↓</button></th>
+            <th><button type="button" class="btn btn-secondary btn-sm">E-mail ↑↓</button></th>
+            <th><button type="button" class="btn btn-secondary btn-sm">Telephone ↑↓</button></th>
+            <th><button type="button" class="btn btn-secondary btn-sm">Date of Creation ↑↓</button></th>
         </tr>
         <tr th:each="user:${users}">
             <td th:text="${user.getId()}"></td>
@@ -43,9 +67,6 @@
             </td>
         </tr>
     </table>
-    <a th:href="@{/add}">
-        <button type="button" class="btn btn-primary btn-sm" >Add User</button>
-    </a>
 </div>
 </body>
 </html>

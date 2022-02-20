@@ -3,9 +3,15 @@ package com.study.administration.administration.Services;
 import com.study.administration.administration.Models.User;
 import com.study.administration.administration.Repositories.DummyUserRepository;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,12 +24,12 @@ public class UserService
         return repository.AllUsers();
     }
 
-    public User FindUserId(Long id)
+    public User FindUserId(int id)
     {
         return repository.FindById(id);
     }
 
-    public int DeleteUserById(Long id)
+    public int DeleteUserById(int id)
     {
         var user = repository.FindById(id);
         if (user == null)
@@ -55,7 +61,7 @@ public class UserService
     }
      */
 
-    public int ChangeStatus(Long id)
+    public int ChangeStatus(int id)
     {
         User user = repository.FindById(id);
         if (user == null)
@@ -75,12 +81,66 @@ public class UserService
         }
         return 200;
     }
-    public void EditUser(String name, String surname, String email, String phoneNumber, Long id)
+    public void EditUser(String name, String surname, String email, String phoneNumber, int id)
     {
         User newDataUser = repository.FindById(id);
         newDataUser.setName(name);
         newDataUser.setSurname(surname);
         newDataUser.setEmail(email);
         newDataUser.setPhoneNumber(phoneNumber);
+    }
+    public List<User> FindBy(String kind, String value)
+    {
+        List<User>  allUsers = repository.AllUsers();
+
+        if (Objects.equals(kind, "name"))
+        {
+             return allUsers.stream().filter(user -> Objects.equals(user.getName().toLowerCase(), value.toLowerCase()))
+                                    .collect(Collectors.toList());
+        }
+        if (Objects.equals(kind, "surname"))
+        {
+            return allUsers.stream().filter(user -> Objects.equals(user.getSurname().toLowerCase(), value.toLowerCase()))
+                                    .collect(Collectors.toList());
+        }
+        if (Objects.equals(kind, "email"))
+        {
+            return allUsers.stream().filter(user -> Objects.equals(user.getEmail().toLowerCase(), value.toLowerCase()))
+                                    .collect(Collectors.toList());
+        }
+        if (Objects.equals(kind, "telephone"))
+        {
+            return allUsers.stream().filter(user -> Objects.equals(user.getPhoneNumber(), value)).collect(Collectors.toList());
+        }
+        else
+        {
+            var splited = value.toCharArray();
+            for (int i = 0; i < value.length(); i++)
+            {
+                if (!Character.isDigit(splited[i]))
+                {
+                    return Collections.emptyList();
+                }
+            }
+            int number = Integer.parseInt(value);
+            return allUsers.stream().filter(user -> user.getId() == number).collect(Collectors.toList());
+        }
+    }
+    @SneakyThrows
+    public List<User> TimeRange(Date dateFrom, Date dateTo)
+    {
+        String dateFromInMili = dateFrom.toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = sdf.parse(dateFromInMili);
+        long millisFrom = date.getTime();
+
+        String dateToInMili = dateTo.toString();
+        SimpleDateFormat sdfTO = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateTO = sdf.parse(dateToInMili);
+        long millisTo = dateTO.getTime();
+
+
+        List<User>  allUsers = repository.AllUsers();
+        return allUsers.stream().filter(user -> user.getDateOfCreationInLong() >= millisFrom && user.getDateOfCreationInLong() <= millisTo).collect(Collectors.toList());
     }
 }

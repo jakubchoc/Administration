@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 public class UserController
@@ -45,7 +48,7 @@ public class UserController
      */
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id, Model model)
+    public String deleteUser(@PathVariable int id, Model model)
     {
         int statusCode = userService.DeleteUserById(id);
         if (statusCode == 200)
@@ -60,7 +63,7 @@ public class UserController
 
     }
     @GetMapping("/editview/{id}")
-    public String editUserView(@PathVariable Long id, Model model)
+    public String editUserView(@PathVariable int id, Model model)
     {
         User user = userService.FindUserId(id);
         if(user == null)
@@ -75,14 +78,14 @@ public class UserController
         }
     }
     @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable Long id, String name, String surname, String email, String phoneNumber)
+    public String editUser(@PathVariable int id, String name, String surname, String email, String phoneNumber)
     {
         userService.EditUser(name, surname, email, phoneNumber, id);
         return "redirect:/";
     }
 
     @GetMapping ("/status/{id}")
-    public String changeStatus(@PathVariable Long id, Model model)
+    public String changeStatus(@PathVariable int id, Model model)
     {
         int statusCode = userService.ChangeStatus(id);
         if (statusCode == 200)
@@ -94,5 +97,19 @@ public class UserController
             model.addAttribute("error", "Status code: 404 Not Found");
             return "statusCode";
         }
+    }
+    @PostMapping("/find")
+    public String findBy(String kind, String search, Model model)
+    {
+        List<User> result = userService.FindBy(kind, search);
+        model.addAttribute("users", result);
+        return "index";
+    }
+    @PostMapping("/date")
+    public String dateSort(Date dateFrom, Date dateTo, Model model)
+    {
+        List<User> result = userService.TimeRange(dateFrom, dateTo);
+        model.addAttribute("users", result);
+        return "index";
     }
 }
