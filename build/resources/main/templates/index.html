@@ -67,6 +67,12 @@
             </td>
         </tr>
     </table>
+    <table>
+        <tr th:each="page:${pages}">
+            <th><a th:text="${page}" th:href="@{|${path}/*{page}|}"></a></th>
+        </tr>
+    </table>
+
 </div>
 </body>
 </html>

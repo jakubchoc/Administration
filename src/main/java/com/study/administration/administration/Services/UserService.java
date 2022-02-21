@@ -5,7 +5,6 @@ import com.study.administration.administration.Repositories.DummyUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
