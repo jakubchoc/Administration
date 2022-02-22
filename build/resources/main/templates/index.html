@@ -27,11 +27,15 @@
             <input type="text" placeholder="Search.." name="search">
             <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
     </form><br>
-    <form  th:action="@{/date}" method="get">
+    <form  th:action="@{/date}" method="get" ><!--th:object="${time1}, ${time2}"-->
         <label >Select Date:</label>
         <input name="dateFrom" type="date" placeholder="from">
         <input name="dateTo" type="date" placeholder="to">
         <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
+        <!--
+        <input type="hidden" th:value="${time1}" name="dateFrom">
+        <input type="hidden" th:value="${time2}" name="dateTo">
+        -->
     </form><br>
     <a th:href="@{/}">
         <button type="button" class="btn btn-primary btn-sm" >Reset</button>
@@ -78,5 +82,6 @@
             <th><a th:text="${page}" th:href="@{|${path}/pageNumber=*{page}|}"></a></th>
         </tr>
 </div>
+
 </body>
 </html>

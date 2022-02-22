@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,75 +74,47 @@ public class UserService
     public List<User> FindBy(String kind, String value, String status)
     {
         List<User>  allUsers = repository.AllUsers();
+
         boolean choice = true;
-        if (status == "true")
-        {
-            choice = true;
-        }
-        if (status == "false")
+        if (status.equals("false"))
         {
             choice = false;
         }
 
-        if (Objects.equals(kind, "name"))
-        {
-            if (status == "all")
-            {
-                return findByNameAll(allUsers, value);
-            }
-            else
-            {
+        switch(kind){
+            case "name":
+                if (status.equals("all")){
+                    return findByNameAll(allUsers, value);
+                }
                 return findByName(allUsers, value, choice);
-            }
-        }
-        if (Objects.equals(kind, "surname"))
-        {
-            if (status == "all")
-            {
-                return findBySurNameAll(allUsers, value);
-            }
-            else
-            {
+            case "surname":
+                if (status.equals("all")){
+                    return findBySurNameAll(allUsers, value);
+                }
                 return findBySurName(allUsers, value, choice);
-            }
-        }
-        if (Objects.equals(kind, "email"))
-        {
-            if (status == "all")
-            {
-                return findByEmailAll(allUsers, value);
-            }
-            else
-            {
+            case "email":
+                if (status.equals("all")){
+                    return findByEmailAll(allUsers, value);
+                }
                 return findByEmail(allUsers, value, choice);
-            }
-        }
-        if (Objects.equals(kind, "telephone"))
-        {
-            if (status == "all")
-            {
-                return findByTelephoneAll(allUsers, value);
-            }
-            else
-            {
+            case "telephone":
+                if (status.equals("all")){
+                    return findByTelephoneAll(allUsers, value);
+                }
                 return findByTelephone(allUsers, value, choice);
-            }
+            case "id":
+                if (status.equals("all")){
+                    return findByIdAll(allUsers, value);
+                }
         }
-        else
-        {
-            if (status == "all")
-            {
-                return findByIdAll(allUsers, value);
-            }
-            else
-            {
-                return findById(allUsers, value, choice);
-            }
-        }
+        return findById(allUsers, value, choice);
     }
 
     public List<User> findByName(List<User> allUsers, String value, boolean choice)
     {
+        Predicate<User> namePredicate = u -> u.getName().contains(value);
+        List<User> filteredUsers = allUsers.stream().filter(namePredicate).collect(Collectors.toList());
+
         return allUsers.stream().filter(user -> user.getName().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
                 .collect(Collectors.toList());
     }
