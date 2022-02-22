@@ -42,24 +42,6 @@ public class UserService
         }
     }
 
-    /*
-    public int AddUser(User user)
-    {
-        Date date = new Date();
-        User newUser = new User(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), date.getTime()); // dodelat!!!
-
-        if (user == null)
-        {
-            return 400;
-        }
-        else
-        {
-            repository.AddUser(newUser);
-            return 200;
-        }
-    }
-     */
-
     public int ChangeStatus(int id)
     {
         User user = repository.FindById(id);
@@ -88,43 +70,151 @@ public class UserService
         newDataUser.setEmail(email);
         newDataUser.setPhoneNumber(phoneNumber);
     }
-    public List<User> FindBy(String kind, String value)
+    public List<User> FindBy(String kind, String value, String status)
     {
         List<User>  allUsers = repository.AllUsers();
+        boolean choice = true;
+        if (status == "true")
+        {
+            choice = true;
+        }
+        if (status == "false")
+        {
+            choice = false;
+        }
 
         if (Objects.equals(kind, "name"))
         {
-             return allUsers.stream().filter(user -> Objects.equals(user.getName().toLowerCase(), value.toLowerCase()))
-                                    .collect(Collectors.toList());
+            if (status == "all")
+            {
+                return findByNameAll(allUsers, value);
+            }
+            else
+            {
+                return findByName(allUsers, value, choice);
+            }
         }
         if (Objects.equals(kind, "surname"))
         {
-            return allUsers.stream().filter(user -> Objects.equals(user.getSurname().toLowerCase(), value.toLowerCase()))
-                                    .collect(Collectors.toList());
+            if (status == "all")
+            {
+                return findBySurNameAll(allUsers, value);
+            }
+            else
+            {
+                return findBySurName(allUsers, value, choice);
+            }
         }
         if (Objects.equals(kind, "email"))
         {
-            return allUsers.stream().filter(user -> Objects.equals(user.getEmail().toLowerCase(), value.toLowerCase()))
-                                    .collect(Collectors.toList());
+            if (status == "all")
+            {
+                return findByEmailAll(allUsers, value);
+            }
+            else
+            {
+                return findByEmail(allUsers, value, choice);
+            }
         }
         if (Objects.equals(kind, "telephone"))
         {
-            return allUsers.stream().filter(user -> Objects.equals(user.getPhoneNumber(), value)).collect(Collectors.toList());
+            if (status == "all")
+            {
+                return findByTelephoneAll(allUsers, value);
+            }
+            else
+            {
+                return findByTelephone(allUsers, value, choice);
+            }
         }
         else
         {
-            var splited = value.toCharArray();
-            for (int i = 0; i < value.length(); i++)
+            if (status == "all")
             {
-                if (!Character.isDigit(splited[i]))
-                {
-                    return Collections.emptyList();
-                }
+                return findByIdAll(allUsers, value);
             }
-            int number = Integer.parseInt(value);
-            return allUsers.stream().filter(user -> user.getId() == number).collect(Collectors.toList());
+            else
+            {
+                return findById(allUsers, value, choice);
+            }
         }
     }
+
+    public List<User> findByName(List<User> allUsers, String value, boolean choice)
+    {
+        return allUsers.stream().filter(user -> user.getName().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findBySurName(List<User> allUsers, String value, boolean choice)
+    {
+        return allUsers.stream().filter(user -> user.getSurname().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findByTelephone(List<User> allUsers, String value, boolean choice)
+    {
+        return allUsers.stream().filter(user -> user.getPhoneNumber().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findByEmail(List<User> allUsers, String value, boolean choice)
+    {
+        return allUsers.stream().filter(user -> user.getEmail().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findById(List<User> allUsers, String value, boolean choice)
+    {
+        var splited = value.toCharArray();
+        for (int i = 0; i < value.length(); i++)
+        {
+            if (!Character.isDigit(splited[i]))
+            {
+                return Collections.emptyList();
+            }
+        }
+        int number = Integer.parseInt(value);
+        return allUsers.stream().filter(user -> user.getId() == number  && user.getStatus() == choice).collect(Collectors.toList());
+    }
+    public List<User> findByNameAll(List<User> allUsers, String value)
+    {
+        return allUsers.stream().filter(user -> user.getName().toLowerCase().contains(value.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findBySurNameAll(List<User> allUsers, String value)
+    {
+        return allUsers.stream().filter(user -> user.getSurname().toLowerCase().contains(value.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findByTelephoneAll(List<User> allUsers, String value)
+    {
+        return allUsers.stream().filter(user -> user.getPhoneNumber().toLowerCase().contains(value.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findByEmailAll(List<User> allUsers, String value)
+    {
+        return allUsers.stream().filter(user -> user.getEmail().toLowerCase().contains(value.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> findByIdAll(List<User> allUsers, String value)
+    {
+        var splited = value.toCharArray();
+        for (int i = 0; i < value.length(); i++)
+        {
+            if (!Character.isDigit(splited[i]))
+            {
+                return Collections.emptyList();
+            }
+        }
+        int number = Integer.parseInt(value);
+        return allUsers.stream().filter(user -> user.getId() == number).collect(Collectors.toList());
+    }
+
     @SneakyThrows
     public List<User> TimeRange(Date dateFrom, Date dateTo)
     {

@@ -4,10 +4,10 @@ import com.study.administration.administration.Models.User;
 import com.study.administration.administration.Repositories.DummyUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -15,7 +15,13 @@ public class FilterService
 {
     private final DummyUserRepository repository;
 
-    public List<Integer> Paging(List<User> usersForView, int onPage)
+    public List<User> listingForPage(List<User> allUsers, int pageNumber)
+    {
+        int skip = (pageNumber-1) * 3;
+        List<User> partOfList = allUsers.stream().skip(skip).limit(3).collect(Collectors.toList());
+        return  partOfList;
+    }
+    public List<Integer> paging(List<User> usersForView, int onPage)
     {
         int numberOfPages = 0;
         var itemsInList = usersForView.stream().count();

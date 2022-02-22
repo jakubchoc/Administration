@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <h3>Filter</h3>
-    <form th:action="@{/find}" method="post">
+    <form th:action="@{/find}" method="get">
         <label >Find By:</label>
         <select name="kind" class="form-select form-select-sm" aria-label="Default select example">
             <option value="name">Name</option>
@@ -17,10 +17,17 @@
             <option value="telephone">Telephone</option>
             <option value="id">Id</option>
         </select>
+        <label >Status:</label>
+        <select name="status" class="form-select form-select-sm" aria-label="Default select example">
+            <option value="true">Active</option>
+            <option value="false">Unactive</option>
+            <option value="null">All</option>
+        </select>
+        <label >Search:</label>
             <input type="text" placeholder="Search.." name="search">
             <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
     </form><br>
-    <form  th:action="@{/date}" method="post">
+    <form  th:action="@{/date}" method="get">
         <label >Select Date:</label>
         <input name="dateFrom" type="date" placeholder="from">
         <input name="dateTo" type="date" placeholder="to">
@@ -34,13 +41,13 @@
     <h3>Administration</h3>
     <table class="table table-striped">
         <tr>
-            <th><button type="button" class="btn btn-secondary btn-sm">ID ↑↓</button></th>
-            <th><button type="button" class="btn btn-secondary btn-sm">Name ↑↓</button></th>
-            <th><button type="button" class="btn btn-secondary btn-sm">Surname ↑↓</button></th>
-            <th><button type="button" class="btn btn-secondary btn-sm">Status ↑↓</button></th>
-            <th><button type="button" class="btn btn-secondary btn-sm">E-mail ↑↓</button></th>
-            <th><button type="button" class="btn btn-secondary btn-sm">Telephone ↑↓</button></th>
-            <th><button type="button" class="btn btn-secondary btn-sm">Date of Creation ↑↓</button></th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Status</th>
+            <th>E-mail</th>
+            <th>Telephone</th>
+            <th>Date of Creation</th>
         </tr>
         <tr th:each="user:${users}">
             <td th:text="${user.getId()}"></td>
@@ -51,28 +58,25 @@
             <td th:text="${user.getPhoneNumber()}"></td>
             <td th:text="${user.getDateOfCreation()}"></td>
             <td>
-                <a th:href="@{|/status/*{user.getId()}|}"*>
+                <a th:href="@{|/status/id=*{user.getId()}|}"*>
                     <button type="button" class="btn btn-primary btn-sm">Change status</button>
                 </a>
             </td>
             <td>
-                <a th:href="@{|/editview/*{user.getId()}|}"*>
+                <a th:href="@{|/editview/id=*{user.getId()}|}"*>
                     <button type="button" class="btn btn-primary btn-sm">Edit</button>
                 </a>
             </td>
             <td>
-                <a th:href="@{|/delete/*{user.getId()}|}"*>
+                <a th:href="@{|/delete/id=*{user.getId()}|}"*>
                     <button type="button" class="btn btn-primary btn-sm">Delete</button>
                 </a>
             </td>
         </tr>
     </table>
-    <table>
         <tr th:each="page:${pages}">
-            <th><a th:text="${page}" th:href="@{|${path}/*{page}|}"></a></th>
+            <th><a th:text="${page}" th:href="@{|${path}/pageNumber=*{page}|}"></a></th>
         </tr>
-    </table>
-
 </div>
 </body>
 </html>
