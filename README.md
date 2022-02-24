@@ -1,6 +1,5 @@
 <div align="center">  </div>
 <span align="center"> <h1> Administration </h1> </span>
-</br>
 
 #### JAVA Spring API App 
 
