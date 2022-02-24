@@ -11,33 +11,27 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class FilterService
-{
+public class FilterService {
     private final DummyUserRepository repository;
 
-    public List<User> listingForPage(List<User> allUsers, int pageNumber)
-    {
-        int skip = (pageNumber-1) * 3;
+    public List<User> listingForPage(List<User> allUsers, int pageNumber) {
+        int skip = (pageNumber - 1) * 3;
         List<User> partOfList = allUsers.stream().skip(skip).limit(3).collect(Collectors.toList());
-        return  partOfList;
+        return partOfList;
     }
-    public List<Integer> paging(List<User> usersForView, int onPage)
-    {
+
+    public List<Integer> paging(List<User> usersForView, int onPage) {
         int numberOfPages = 0;
         var itemsInList = usersForView.stream().count();
-        if (itemsInList % onPage != 0)
-        {
-            numberOfPages += (itemsInList / onPage) +1;
-        }
-        else
-        {
+        if (itemsInList % onPage != 0) {
+            numberOfPages += (itemsInList / onPage) + 1;
+        } else {
             numberOfPages += (itemsInList / onPage);
         }
 
         int counter = 1;
         List<Integer> listOfIndexes = new ArrayList<>();
-        for (int i = 0; i < numberOfPages; i++)
-        {
+        for (int i = 0; i < numberOfPages; i++) {
             listOfIndexes.add(counter);
             counter++;
         }

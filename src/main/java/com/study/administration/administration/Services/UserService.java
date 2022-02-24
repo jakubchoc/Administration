@@ -5,192 +5,131 @@ import com.study.administration.administration.Repositories.DummyUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UserService
-{
+public class UserService {
     private final DummyUserRepository repository;
 
-    public List<User> FindAllUsers()
-    {
+    public List<User> FindAllUsers() {
         return repository.AllUsers();
     }
 
-    public User FindUserId(int id)
-    {
+    public User FindUserId(int id) {
         return repository.FindById(id);
     }
 
-    public int DeleteUserById(int id)
-    {
+    public int DeleteUserById(int id) {
         var user = repository.FindById(id);
-        if (user == null)
-        {
+        if (user == null) {
             return 404;
-        }
-        else
-        {
+        } else {
             repository.DeleteById(id);
             return 200;
         }
     }
 
-    public int ChangeStatus(int id)
-    {
+    public int ChangeStatus(int id) {
         User user = repository.FindById(id);
-        if (user == null)
-        {
+        if (user == null) {
             return 404;
-        }
-        else
-        {
-            if (user.getStatus() == true)
-            {
+        } else {
+            if (user.getStatus() == true) {
                 user.setStatus(false);
-            }
-            else
-            {
+            } else {
                 user.setStatus(true);
             }
         }
         return 200;
     }
-    public void EditUser(String name, String surname, String email, String phoneNumber, int id)
-    {
+
+    public void EditUser(String name, String surname, String email, String phoneNumber, int id) {
         User newDataUser = repository.FindById(id);
         newDataUser.setName(name);
         newDataUser.setSurname(surname);
         newDataUser.setEmail(email);
         newDataUser.setPhoneNumber(phoneNumber);
     }
-    public List<User> FindBy(String kind, String value, String status)
-    {
-        List<User>  allUsers = repository.AllUsers();
+
+    public List<User> FindBy(String kind, String value, String status) {
+        List<User> allUsers = repository.AllUsers();
 
         boolean choice = true;
-        if (status.equals("false"))
-        {
+        if (status.equals("false")) {
             choice = false;
         }
+        boolean finalChoice = choice;
 
-        switch(kind){
+        Predicate<User> namePredicate = u -> u.getName().contains(value) && u.getStatus() == finalChoice;
+        Predicate<User> surNamePredicate = u -> u.getSurname().contains(value) && u.getStatus() == finalChoice;
+        Predicate<User> emailPredicate = u -> u.getEmail().contains(value) && u.getStatus() == finalChoice;
+        Predicate<User> telephonePredicate = u -> u.getPhoneNumber().contains(value) && u.getStatus() == finalChoice;
+        Predicate<User> idPredicate = u -> u.getId() == Integer.parseInt(value) && u.getStatus() == finalChoice;
+
+        Predicate<User> namePredicateAll = u -> u.getName().contains(value);
+        Predicate<User> surNamePredicateAll = u -> u.getSurname().contains(value);
+        Predicate<User> emailPredicateAll = u -> u.getEmail().contains(value);
+        Predicate<User> telephonePredicateAll = u -> u.getPhoneNumber().contains(value);
+        Predicate<User> idPredicateAll = u -> u.getId() == Integer.parseInt(value);
+
+        switch (kind) {
             case "name":
-                if (status.equals("all")){
-                    return findByNameAll(allUsers, value);
+                if (status.equals("all")) {
+                    return findAll(allUsers, namePredicateAll);
                 }
-                return findByName(allUsers, value, choice);
+                return find(allUsers, namePredicate, choice);
             case "surname":
-                if (status.equals("all")){
-                    return findBySurNameAll(allUsers, value);
+                if (status.equals("all")) {
+                    return findAll(allUsers, surNamePredicateAll);
                 }
-                return findBySurName(allUsers, value, choice);
+                return find(allUsers, surNamePredicate, choice);
             case "email":
-                if (status.equals("all")){
-                    return findByEmailAll(allUsers, value);
+                if (status.equals("all")) {
+                    findAll(allUsers, emailPredicateAll);
                 }
-                return findByEmail(allUsers, value, choice);
+                return find(allUsers, emailPredicate, choice);
             case "telephone":
-                if (status.equals("all")){
-                    return findByTelephoneAll(allUsers, value);
+                if (status.equals("all")) {
+                    findAll(allUsers, telephonePredicateAll);
                 }
-                return findByTelephone(allUsers, value, choice);
+                return find(allUsers, telephonePredicate, choice);
             case "id":
-                if (status.equals("all")){
-                    return findByIdAll(allUsers, value);
+                if (status.equals("all")) {
+                    return findByIdAll(allUsers, value, idPredicateAll);
                 }
         }
-        return findById(allUsers, value, choice);
+        return findById(allUsers, value, idPredicate, choice);
     }
 
-    public List<User> findByName(List<User> allUsers, String value, boolean choice)
-    {
-        Predicate<User> namePredicate = u -> u.getName().contains(value);
-        List<User> filteredUsers = allUsers.stream().filter(namePredicate).collect(Collectors.toList());
-
-        return allUsers.stream().filter(user -> user.getName().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
-                .collect(Collectors.toList());
+    public List<User> findAll(List<User> allUsers, Predicate predicate) {
+        return (List<User>) allUsers.stream().filter(predicate).collect(Collectors.toList());
     }
 
-    public List<User> findBySurName(List<User> allUsers, String value, boolean choice)
-    {
-        return allUsers.stream().filter(user -> user.getSurname().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
-                .collect(Collectors.toList());
+    public List<User> find(List<User> allUsers, Predicate predicate, boolean choice) {
+        return (List<User>) allUsers.stream().filter(predicate).collect(Collectors.toList());
     }
 
-    public List<User> findByTelephone(List<User> allUsers, String value, boolean choice)
-    {
-        return allUsers.stream().filter(user -> user.getPhoneNumber().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
-                .collect(Collectors.toList());
-    }
-
-    public List<User> findByEmail(List<User> allUsers, String value, boolean choice)
-    {
-        return allUsers.stream().filter(user -> user.getEmail().toLowerCase().contains(value.toLowerCase()) && user.getStatus() == choice)
-                .collect(Collectors.toList());
-    }
-
-    public List<User> findById(List<User> allUsers, String value, boolean choice)
-    {
-        var splited = value.toCharArray();
-        for (int i = 0; i < value.length(); i++)
-        {
-            if (!Character.isDigit(splited[i]))
-            {
-                return Collections.emptyList();
-            }
+    public List<User> findById(List<User> allUsers, String value, Predicate predicate, boolean choice) {
+        if (value.matches("[0-9]+") == true) {
+            return Collections.emptyList();
         }
-        int number = Integer.parseInt(value);
-        return allUsers.stream().filter(user -> user.getId() == number  && user.getStatus() == choice).collect(Collectors.toList());
-    }
-    public List<User> findByNameAll(List<User> allUsers, String value)
-    {
-        return allUsers.stream().filter(user -> user.getName().toLowerCase().contains(value.toLowerCase()))
-                .collect(Collectors.toList());
+        return (List<User>) allUsers.stream().filter(predicate).collect(Collectors.toList());
     }
 
-    public List<User> findBySurNameAll(List<User> allUsers, String value)
-    {
-        return allUsers.stream().filter(user -> user.getSurname().toLowerCase().contains(value.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    public List<User> findByTelephoneAll(List<User> allUsers, String value)
-    {
-        return allUsers.stream().filter(user -> user.getPhoneNumber().toLowerCase().contains(value.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    public List<User> findByEmailAll(List<User> allUsers, String value)
-    {
-        return allUsers.stream().filter(user -> user.getEmail().toLowerCase().contains(value.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    public List<User> findByIdAll(List<User> allUsers, String value)
-    {
-        var splited = value.toCharArray();
-        for (int i = 0; i < value.length(); i++)
-        {
-            if (!Character.isDigit(splited[i]))
-            {
-                return Collections.emptyList();
-            }
+    public List<User> findByIdAll(List<User> allUsers, String value, Predicate predicate) {
+        if (value.matches("[0-9]+") == true) {
+            return Collections.emptyList();
         }
-        int number = Integer.parseInt(value);
-        return allUsers.stream().filter(user -> user.getId() == number).collect(Collectors.toList());
+        return (List<User>) allUsers.stream().filter(predicate).collect(Collectors.toList());
     }
 
     @SneakyThrows
-    public List<User> TimeRange(Date dateFrom, Date dateTo)
-    {
+    public List<User> TimeRange(Date dateFrom, Date dateTo) {
         String dateFromInMili = dateFrom.toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse(dateFromInMili);
@@ -202,7 +141,7 @@ public class UserService
         long millisTo = dateTO.getTime();
 
 
-        List<User>  allUsers = repository.AllUsers();
+        List<User> allUsers = repository.AllUsers();
         return allUsers.stream().filter(user -> user.getDateOfCreationInLong() >= millisFrom && user.getDateOfCreationInLong() <= millisTo).collect(Collectors.toList());
     }
 }

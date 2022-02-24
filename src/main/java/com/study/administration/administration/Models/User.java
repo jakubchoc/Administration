@@ -5,8 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 
-public class User
-{
+public class User {
     private int id;
 
     private String name;
@@ -22,8 +21,7 @@ public class User
     private Long dateOfCreation;
 
 
-    public User(int id, String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation)
-    {
+    public User(int id, String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -85,7 +83,7 @@ public class User
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getDateOfCreationInLong(){
+    public Long getDateOfCreationInLong() {
         return dateOfCreation;
     }
 
@@ -95,6 +93,7 @@ public class User
         return simple.format(result);
 
     }
+
     public void setDateOfCreation(Long dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
