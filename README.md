@@ -20,3 +20,5 @@ Administration is databse of users.
 - [JAVA]
 - [THYMELEAF]
 - [SPRING FRAMEWORK]
+- [HTML]
+- [BOOTSTRAP]
