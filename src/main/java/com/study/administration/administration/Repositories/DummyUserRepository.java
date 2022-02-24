@@ -2,7 +2,6 @@ package com.study.administration.administration.Repositories;
 
 import com.study.administration.administration.Models.User;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 

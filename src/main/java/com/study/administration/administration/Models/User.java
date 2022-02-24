@@ -1,9 +1,9 @@
 package com.study.administration.administration.Models;
 
+import javax.swing.text.MaskFormatter;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 
 public class User {
     private int id;
@@ -19,7 +19,6 @@ public class User {
     private String phoneNumber;
 
     private Long dateOfCreation;
-
 
     public User(int id, String name, String surname, boolean status, String email, String phoneNumber, Long dateOfCreation) {
         this.id = id;
@@ -76,6 +75,9 @@ public class User {
     }
 
     public String getPhoneNumber() {
+        if (phoneNumber.length() == 9){
+            return ""+phoneNumber.substring(0, 3)+" "+phoneNumber.substring(3, 6)+" "+phoneNumber.substring(6, 9);
+        }
         return phoneNumber;
     }
 

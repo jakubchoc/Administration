@@ -8,9 +8,10 @@
 <body>
 <div class="container">
     <h2>Edit User</h2>
-        <form th:action="@{|/edit/*{userPlaceHolder.getId()}|}"*>
+        <form action="/edit" method="post">
         <label>
             Name:
+            <input type="hidden" th:value="${userPlaceHolder.getId()}" name="id">
             <input type="text" name="name" class="form-control" th:value="${userPlaceHolder.getName()}" required>
         </label>
         <br>

@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
@@ -36,12 +35,13 @@ public class UserController {
             model.addAttribute("users", filterService.listingForPage(allUsers, pageNumber));
             model.addAttribute("pages", numbersForPaging);
             model.addAttribute("path", "");
+            model.addAttribute("actualPage", pageNumber);
             return "index";
         }
     }
 
-    @GetMapping("/delete/id={id}")
-    public String deleteUser(@PathVariable int id, Model model) {
+    @PostMapping("/delete")
+    public String deleteUser( int id, Model model) {
         int statusCode = userService.DeleteUserById(id);
         if (statusCode == 200) {
             return "redirect:/";
@@ -63,14 +63,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable int id, String name, String surname, String email, String phoneNumber) {
+    @PostMapping("/edit")
+    public String editUser(int id, String name, String surname, String email, String phoneNumber) {
         userService.EditUser(name, surname, email, phoneNumber, id);
         return "redirect:/";
     }
 
-    @GetMapping("/status/id={id}")
-    public String changeStatus(@PathVariable int id, Model model) {
+    @PostMapping("/status")
+    public String changeStatus(int id, Model model) {
         int statusCode = userService.ChangeStatus(id);
         if (statusCode == 200) {
             return "redirect:/";
@@ -87,84 +87,66 @@ public class UserController {
             pageNumber = 1;
         }
         HttpSession session = request.getSession();
-        String kindInput = (String) session.getAttribute("kind");
-        String searchInput = (String) session.getAttribute("search");
-        String statusInput = (String) session.getAttribute("status");
 
-        FindModelSession findModelSession = new FindModelSession();
-        findModelSession.kindSession = kindInput;
-        findModelSession.searchSession = searchInput;
-        findModelSession.statusSession = statusInput;
-
-        if (kind != null && search != null && status != null) {
+        if (kind == null && search == null && status == null) {
+            kind = (String) session.getAttribute("kind");
+            search = (String) session.getAttribute("search");
+            status = (String) session.getAttribute("status");
+        } else {
             session.setAttribute("kind", kind);
             session.setAttribute("search", search);
             session.setAttribute("status", status);
-            List<User> findedUsers = userService.FindBy(kind, search, status);
-            List<Integer> numbersForPaging = filterService.paging(findedUsers, 3);
-            if (pageNumber > numbersForPaging.stream().count()) {
-                model.addAttribute("error", "Status code: 400 Bad Request");
-                return "statusCode";
-            } else {
-                model.addAttribute("users", filterService.listingForPage(findedUsers, pageNumber));
-                model.addAttribute("pages", numbersForPaging);
-                model.addAttribute("path", "find");
-                return "index";
-            }
+        }
+        FindModelSession findModelSession = new FindModelSession();
+        findModelSession.kindSession = kind;
+        findModelSession.searchSession = search;
+        findModelSession.statusSession = status;
+
+        List<User> findedUsers = filterService.FindBy(kind, search, status);
+        List<Integer> numbersForPaging = filterService.paging(findedUsers, 3);
+        if (!numbersForPaging.contains(pageNumber) && pageNumber != 1) {
+            model.addAttribute("error", "Status code: 400 Bad Request");
+            return "statusCode";
         } else {
-            List<User> findedUsers = userService.FindBy(findModelSession.kindSession, findModelSession.searchSession,
-                    findModelSession.statusSession);
-            List<Integer> numbersForPaging = filterService.paging(findedUsers, 3);
-            if (pageNumber > numbersForPaging.stream().count()) {
-                model.addAttribute("error", "Status code: 400 Bad Request");
-                return "statusCode";
-            } else {
-                model.addAttribute("users", filterService.listingForPage(findedUsers, pageNumber));
-                model.addAttribute("pages", numbersForPaging);
-                model.addAttribute("path", "find");
-                return "index";
-            }
+            model.addAttribute("users", filterService.listingForPage(findedUsers, pageNumber));
+            model.addAttribute("pages", numbersForPaging);
+            model.addAttribute("path", "/find");
+            model.addAttribute("actualPage", pageNumber);
+            return "index";
         }
     }
 
     @GetMapping(value = {"/date", "/date/pageNumber={pageNumber}"})
-    public String dateSort(@PathVariable(required = false) Integer pageNumber, Date dateFrom, Date dateTo, Model model, HttpServletRequest request) {
+    public String dateSort(@PathVariable(required = false) Integer pageNumber, Date dateFrom, Date dateTo, Model model,
+                           HttpServletRequest request) {
         if (pageNumber == null) {
             pageNumber = 1;
         }
         HttpSession session = request.getSession();
-        Date dateOne = (Date) session.getAttribute("dateOne");
-        Date dateTwo = (Date) session.getAttribute("dateTwo");
-        DateModelSession dateModelSession = new DateModelSession();
-        dateModelSession.dateFromSession = dateOne;
-        dateModelSession.dateToSession = dateTwo;
 
         if (dateFrom != null && dateTo != null) {
+            dateFrom = (Date) session.getAttribute("dateOne");
+            dateTo = (Date) session.getAttribute("dateTwo");
+        } else {
             session.setAttribute("dateOne", dateFrom);
             session.setAttribute("dateTwo", dateTo);
-            List<User> usersInDate = userService.TimeRange(dateFrom, dateTo);
-            List<Integer> numbersForPaging = filterService.paging(usersInDate, 3);
-            if (pageNumber > numbersForPaging.stream().count()) {
-                model.addAttribute("error", "Status code: 400 Bad Request");
-                return "statusCode";
-            } else {
-                model.addAttribute("users", filterService.listingForPage(usersInDate, pageNumber));
-                model.addAttribute("pages", numbersForPaging);
-                model.addAttribute("path", "/date");
-                return "index";
-            }
+        }
+        DateModelSession dateModelSession = new DateModelSession();
+        dateModelSession.dateFromSession = dateFrom;
+        dateModelSession.dateToSession = dateTo;
+
+        List<User> usersInDate = filterService.TimeRange(dateFrom, dateTo);
+        List<Integer> numbersForPaging = filterService.paging(usersInDate, 3);
+        if (!numbersForPaging.contains(pageNumber) && pageNumber != 1) {
+            model.addAttribute("error", "Status code: 400 Bad Request");
+            return "statusCode";
         } else {
-            List<User> usersInDate = userService.TimeRange(dateModelSession.dateFromSession, dateModelSession.dateToSession);
-            List<Integer> numbersForPaging = filterService.paging(usersInDate, 3);
-            if (pageNumber > numbersForPaging.stream().count()) {
-                model.addAttribute("error", "Status code: 400 Bad Request");
-                return "statusCode";
-            } else {
-                model.addAttribute("users", filterService.listingForPage(usersInDate, pageNumber));
-                model.addAttribute("pages", numbersForPaging);
-                model.addAttribute("path", "/date");
-                return "index";
-            }
+            model.addAttribute("users", filterService.listingForPage(usersInDate, pageNumber));
+            model.addAttribute("pages", numbersForPaging);
+            model.addAttribute("path", "/date");
+            model.addAttribute("actualPage", pageNumber);
+            return "index";
         }
     }
 }
+
