@@ -31,7 +31,7 @@ EDIT
 TIME RANGE
 - Application can filter users by their creation time.
 - Filter input remains the same after the search is done.
--
+
 SEARCH
 - The application can filter users by ID, NAME, SURNAME, TELEPHONE and EMAIL. 
 - It is possile to filter users by all the properties mentioned above.
