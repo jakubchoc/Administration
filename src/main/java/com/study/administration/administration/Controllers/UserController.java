@@ -29,7 +29,7 @@ public class UserController {
         List<User> allUsers = userService.FindAllUsers();
         List<Integer> numbersForPaging = filterService.paging(allUsers, 3);
         if (pageNumber > numbersForPaging.stream().count()) {
-            model.addAttribute("error", "Status code: 400 Bad Request");
+            model.addAttribute("error", "Status code: 404 Not Found");
             return "statusCode";
         } else {
             model.addAttribute("users", filterService.listingForPage(allUsers, pageNumber));
@@ -41,10 +41,11 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public String deleteUser( int id, Model model) {
+    public String deleteUser( int id, Model model, HttpServletRequest request) {
         int statusCode = userService.DeleteUserById(id);
         if (statusCode == 200) {
-            return "redirect:/";
+            String referer = request.getHeader("Referer");
+            return "redirect:"+ referer;
         } else {
             model.addAttribute("error", "Status code: 404 Not Found");
             return "statusCode";
@@ -76,10 +77,12 @@ public class UserController {
     }
 
     @PostMapping("/status")
-    public String changeStatus(int id, Model model) {
+    public String changeStatus(int id, Model model, HttpServletRequest request) {
         int statusCode = userService.ChangeStatus(id);
         if (statusCode == 200) {
-            return "redirect:/";
+            String referer = request.getHeader("Referer");
+            return "redirect:"+ referer;
+
         } else {
             model.addAttribute("error", "Status code: 404 Not Found");
             return "statusCode";
@@ -118,6 +121,9 @@ public class UserController {
             model.addAttribute("pages", numbersForPaging);
             model.addAttribute("path", "/find");
             model.addAttribute("actualPage", pageNumber);
+            model.addAttribute("forValueSearch", search);
+            model.addAttribute("forValueKind", kind);
+            model.addAttribute("forValueStatus", status);
             return "index";
         }
     }
@@ -151,6 +157,8 @@ public class UserController {
             model.addAttribute("pages", numbersForPaging);
             model.addAttribute("path", "/date");
             model.addAttribute("actualPage", pageNumber);
+            model.addAttribute("forValueDateFrom", dateFrom);
+            model.addAttribute("forValueDateTo", dateTo);
             return "index";
         }
     }

@@ -10,33 +10,34 @@
     <h3>Filter</h3>
     <form th:action="@{/find}" method="get">
         <label >Find By:</label>
-        <select name="kind" class="form-select form-select-sm" aria-label="Default select example" required>
-            <option value="name">Name</option>
-            <option value="surname">Surname</option>
-            <option value="email">E-mail</option>
-            <option value="telephone">Telephone</option>
-            <option value="id">Id</option>
+        <select name="kind" class="form-select form-select-sm" aria-label="Default select example" required >
+            <option value="name" th:selected="${forValueKind == 'name'}? 'selected'">Name</option>
+            <option value="surname" th:selected="${forValueKind == 'surname'}? 'selected'">Surname</option>
+            <option value="email" th:selected="${forValueKind == 'email'}? 'selected'">E-mail</option>
+            <option value="telephone" th:selected="${forValueKind == 'telephone'}? 'selected'">Telephone</option>
+            <option value="id" th:selected="${forValueKind == 'id'}? 'selected'">Id</option>
         </select>
         <label >Status:</label>
         <select name="status" class="form-select form-select-sm" aria-label="Default select example" required>
-            <option value="true">Active</option>
-            <option value="false">Unactive</option>
-            <option value="all">All</option>
+            <option value="true" th:selected="${forValueStatus == 'true'}? 'selected'">Active</option>
+            <option value="false" th:selected="${forValueStatus == 'false'}? 'selected'">Unactive</option>
+            <option value="all" th:selected="${forValueStatus == 'all'}? 'selected'">All</option>
         </select>
         <label >Search:</label>
-            <input type="text" placeholder="Search.." name="search" required>
+            <input type="text" placeholder="Search.." name="search" th:value="${forValueSearch}" required>
             <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
     </form><br>
     <form  th:action="@{/date}" method="get" >
         <label >Select Date:</label>
-        <input name="dateFrom" type="date" placeholder="from" required>
-        <input name="dateTo" type="date" placeholder="to" required>
+        <input name="dateFrom" type="date" placeholder="from" th:value="${forValueDateFrom}" required>
+        <input name="dateTo" type="date" placeholder="to" th:value="${forValueDateTo}" required>
         <input name="value" type="submit" class="btn btn-primary btn-sm" value="Search">
     </form><br>
     <a th:href="@{/}">
         <button type="button" class="btn btn-primary btn-sm" >Reset</button>
     </a>
     <h3>Administration</h3>
+    <table class="table table-striped">
             <th>ID</th>
             <th>Name</th>
             <th>Surname</th>
@@ -45,7 +46,6 @@
             <th>Telephone</th>
             <th>Date of Creation</th>
         </tr>
-    <table class="table table-striped">
         <tr th:each="user:${users}">
             <td th:text="${user.getId()}"></td>
             <td th:text="${user.getName()}"></td>

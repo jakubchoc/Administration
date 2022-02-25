@@ -20,6 +20,15 @@ public class FilterService {
         List<User> partOfList = allUsers.stream().skip(skip).limit(3).collect(Collectors.toList());
         return partOfList;
     }
+    public List<User> lastPage(List<User> allUsers){
+        int numberOfPages = allUsers.size() / 3 ;
+        int others = allUsers.size() & 3 ;
+
+        if (others == 0){
+            return allUsers.stream().skip(3 * numberOfPages).collect(Collectors.toList());
+        }
+        return allUsers.stream().skip(3 * (numberOfPages-1)).collect(Collectors.toList());
+    }
 
     public List<Integer> paging(List<User> usersForView, int onPage) {
         int numberOfPages = 0;
@@ -72,12 +81,12 @@ public class FilterService {
                 return find(allUsers, surNamePredicate, choice);
             case "email":
                 if (status.equals("all")) {
-                    findAll(allUsers, emailPredicateAll);
+                    return findAll(allUsers, emailPredicateAll);
                 }
                 return find(allUsers, emailPredicate, choice);
             case "telephone":
                 if (status.equals("all")) {
-                    findAll(allUsers, telephonePredicateAll);
+                    return findAll(allUsers, telephonePredicateAll);
                 }
                 return find(allUsers, telephonePredicate, choice);
             case "id":

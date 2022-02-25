@@ -3,16 +3,13 @@ package com.study.administration.administration;
 import com.study.administration.administration.Models.User;
 import com.study.administration.administration.Repositories.DummyUserRepository;
 import com.study.administration.administration.Services.FilterService;
-import com.study.administration.administration.Services.UserService;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FilterControllerTests {
+class FilterServiceTests {
 
     FilterService filterService = new FilterService(new DummyUserRepository());
 
@@ -31,7 +28,7 @@ class FilterControllerTests {
         List<Integer> expected = List.of(1,2,3);
         //Act
         var result = filterService.paging(userData, 2);
-        //Assetr
+        //Assert
         assertEquals(result, expected);
     }
     public void PartOfListForPagingOk(){
@@ -43,7 +40,7 @@ class FilterControllerTests {
                 );
         //Act
         var result = filterService.listingForPage(userData, 0);
-        //Assetr
+        //Assert
         assertEquals(result, expected);
     }
     public void FindByOk(){
@@ -54,7 +51,7 @@ class FilterControllerTests {
         );
         //Act
         var result = filterService.findBy("name", "j", "all");
-        //Assetr
+        //Assert
         assertEquals(result, expected);
     }
 
