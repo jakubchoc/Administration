@@ -43,14 +43,14 @@ TESTING
 ## What the application cannot do
 
 DELETE
-- If is open last page and user will remove all user on page that application will redirect to page with rerror because number of page will bigger than actual size of list.
+- Redirection stops working when all users on actual page are deleted.
 EDIT
-- If is edited user on third page after redirect will open first page.
+- After user editing application is redirected to main page.
 INPUT
-- some smart type user would prove the application shut down.
+- There are still ways how to drop down the application.
 
-## Where I see room for improvement
-- I Should improve things that i wrote in section "What the application cannot do".
-- I realize that endpoints are in two situation too much long.
-- I realize that some types if redirections are not correctly, but works.
+## Room for improvement
+- I could improve things that I wrote above.
+- I realize that endpoints are in two cases too long.
+- I realize that some types of redirections are not correct.
 
