@@ -54,3 +54,7 @@ INPUT
 - I realize that endpoints are in two cases too long.
 - I realize that some types of redirections are not correct.
 
+VISUAL DRAFT:
+
+![Layout design](src/main/resources/images/visualdraft.png)
+
