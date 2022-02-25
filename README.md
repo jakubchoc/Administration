@@ -12,10 +12,10 @@ Working on the project was time-demanding because I needed to get familiar with 
 
 ## What the application can do
 
-##PAGINATION
+## PAGINATION
 - The application displays three users on a single page and is possible to list between pages.
 - User can list between filtered users.
-##STATUS
+## STATUS
 - With table button "change status" is possible to change user status.
 - Changing user status does not cause redirection to main page.
 ##DELETE
