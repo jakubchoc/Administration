@@ -43,11 +43,19 @@ public class UserService {
         return 200;
     }
 
-    public void EditUser(String name, String surname, String email, String phoneNumber, int id) {
-        User newDataUser = repository.FindById(id);
-        newDataUser.setName(name);
-        newDataUser.setSurname(surname);
-        newDataUser.setEmail(email);
-        newDataUser.setPhoneNumber(phoneNumber);
+    public int EditUser(String name, String surname, String email, String phoneNumber, int id) {
+        User user = repository.FindById(id);
+        if (user == null)
+        {
+            return 404;
+        }
+        else{
+            User newDataUser = repository.FindById(id);
+            newDataUser.setName(name);
+            newDataUser.setSurname(surname);
+            newDataUser.setEmail(email);
+            newDataUser.setPhoneNumber(phoneNumber);
+            return 200;
+        }
     }
 }

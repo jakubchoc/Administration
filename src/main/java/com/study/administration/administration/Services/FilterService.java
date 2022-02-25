@@ -38,7 +38,7 @@ public class FilterService {
         }
         return listOfIndexes;
     }
-    public List<User> FindBy(String kind, String value, String status) {
+    public List<User> findBy(String kind, String value, String status) {
         List<User> allUsers = repository.AllUsers();
 
         boolean choice = true;
@@ -111,7 +111,7 @@ public class FilterService {
     }
 
     @SneakyThrows
-    public List<User> TimeRange(Date dateFrom, Date dateTo) {
+    public List<User> timeRange(Date dateFrom, Date dateTo) {
         String dateFromInMili = dateFrom.toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse(dateFromInMili);

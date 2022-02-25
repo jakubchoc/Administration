@@ -1,16 +1,12 @@
 package com.study.administration.administration;
 
-import com.study.administration.administration.Models.User;
 import com.study.administration.administration.Repositories.DummyUserRepository;
 import com.study.administration.administration.Services.UserService;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AdministrationApplicationTests {
+class UserControllerTests {
 
     UserService userService = new UserService(new DummyUserRepository());
 

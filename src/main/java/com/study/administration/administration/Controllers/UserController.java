@@ -64,9 +64,15 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String editUser(int id, String name, String surname, String email, String phoneNumber) {
-        userService.EditUser(name, surname, email, phoneNumber, id);
-        return "redirect:/";
+    public String editUser(int id, String name, String surname, String email, String phoneNumber, Model model) {
+        int statusCode = userService.EditUser(name, surname, email, phoneNumber, id);
+        if (statusCode == 200){
+            return "redirect:/";
+        }
+        else{
+            model.addAttribute("error", "Status code: 404 Not Found");
+            return "statusCode";
+        }
     }
 
     @PostMapping("/status")
@@ -102,7 +108,7 @@ public class UserController {
         findModelSession.searchSession = search;
         findModelSession.statusSession = status;
 
-        List<User> findedUsers = filterService.FindBy(kind, search, status);
+        List<User> findedUsers = filterService.findBy(kind, search, status);
         List<Integer> numbersForPaging = filterService.paging(findedUsers, 3);
         if (!numbersForPaging.contains(pageNumber) && pageNumber != 1) {
             model.addAttribute("error", "Status code: 400 Bad Request");
@@ -124,7 +130,7 @@ public class UserController {
         }
         HttpSession session = request.getSession();
 
-        if (dateFrom != null && dateTo != null) {
+        if (dateFrom == null && dateTo == null) {
             dateFrom = (Date) session.getAttribute("dateOne");
             dateTo = (Date) session.getAttribute("dateTwo");
         } else {
@@ -135,7 +141,7 @@ public class UserController {
         dateModelSession.dateFromSession = dateFrom;
         dateModelSession.dateToSession = dateTo;
 
-        List<User> usersInDate = filterService.TimeRange(dateFrom, dateTo);
+        List<User> usersInDate = filterService.timeRange(dateFrom, dateTo);
         List<Integer> numbersForPaging = filterService.paging(usersInDate, 3);
         if (!numbersForPaging.contains(pageNumber) && pageNumber != 1) {
             model.addAttribute("error", "Status code: 400 Bad Request");
