@@ -12,31 +12,40 @@ Working on the project was time-demanding because I needed to get familiar with 
 
 ## What the application can do
 
-## PAGINATION
+PAGINATION
+
 - The application displays three users on a single page and is possible to list between pages.
 - User can list between filtered users.
-## STATUS
+
+STATUS
 - With table button "change status" is possible to change user status.
 - Changing user status does not cause redirection to main page.
-##DELETE
+
+DELETE
 - With table button "delete" is possible to delete user.
 - Deleting user does not cause redirection to main page.
-##EDIT
+
+EDIT
 - With table button "edit" is possible to change any information about user. This button redirect to a new page. In form on page are prepared values of choosed user. User can edit any of them and saved them.
-##TIME RANGE
+
+TIME RANGE
 - Application can filter users by their creation time.
 - Filter input remains the same after the search is done.
-##SEARCH
+-
+SEARCH
 - The application can filter users by ID, NAME, SURNAME, TELEPHONE and EMAIL. 
 - It is possile to filter users by all the properties mentioned above.
 - Filter input remains the same after the search is done.
-##INPUT 
+
+INPUT 
 - The application contains essential error handling, e.g. id does not match any user.
-##VIEW
+
+VIEW
 - The visual part of application is focused on comfortable using.
 - The user interface of application can handle empty or null input.
 - Actual page number is shown.
-##TESTING
+
+TESTING
 - Basic set of unit tests was made.
 
 
@@ -44,8 +53,10 @@ Working on the project was time-demanding because I needed to get familiar with 
 
 DELETE
 - Redirection stops working when all users on actual page are deleted.
+
 EDIT
 - After user editing application is redirected to main page.
+
 INPUT
 - There are still ways how to drop down the application.
 
